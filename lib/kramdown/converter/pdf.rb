@@ -102,13 +102,13 @@ module Kramdown
       # :section: Element rendering methods
       # ----------------------------
 
-      def root_options(_root, _opts)
-        {font: 'Times-Roman', size: 12, leading: 2}
+      def root_options(_root, opts={})
+        {font: 'Times-Roman', size: 12, leading: 2}.merge!(opts)
       end
 
       def render_root(root, opts)
         @pdf = setup_document(root)
-        inner(root, root_options(root, opts))
+        inner(root, root_options(root, opts[:root_options]))
         create_outline(root)
         finish_document(root)
         @pdf.render
