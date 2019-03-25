@@ -107,7 +107,7 @@ module Kramdown
       end
 
       def render_root(root, opts)
-        @pdf = setup_document(root)
+        @pdf = setup_document(root, opts)
         inner(root, root_options(root, opts[:root_options]))
         create_outline(root)
         finish_document(root)
@@ -523,8 +523,13 @@ module Kramdown
       # Can be used to define repeatable content or register fonts.
       #
       # Used in #render_root.
-      def setup_document(root)
+      def setup_document(root, opts)
         doc = Prawn::Document.new(document_options(root))
+        unless opts[:register_fonts].blank?
+            opts[:register_fonts].each do |name, font_config|
+                doc.font_families.update(Hash[name, font_config])
+            end
+        end
         doc.extend(PrawnDocumentExtension)
         doc.converter = self
         doc
