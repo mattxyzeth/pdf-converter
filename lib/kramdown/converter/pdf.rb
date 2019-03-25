@@ -154,7 +154,8 @@ module Kramdown
 
         img_dirs = (@options[:image_directories] || ['.']).dup
         begin
-          img_path = File.join(img_dirs.shift, img.attr['src'])
+          src = img.attr['src']
+          img_path = if src =~ /^http/ then src else File.join(img_dirs.shift, img.attr['src']) end
           image_obj, image_info = @pdf.build_image_object(open(img_path))
         rescue StandardError
           img_dirs.empty? ? raise : retry
