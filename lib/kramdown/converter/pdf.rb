@@ -43,7 +43,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.6'
+      VERSION = '1.0.7'
 
       include Prawn::Measurements
 
@@ -102,13 +102,13 @@ module Kramdown
       # :section: Element rendering methods
       # ----------------------------
 
-      def root_options(_root, opts={})
-        {font: 'Times-Roman', size: 12, leading: 2}.merge!(opts)
+      def root_options(_root, _opts)
+        {font: 'Roboto Condensed', size: 12, leading: 2}
       end
 
       def render_root(root, opts)
         @pdf = setup_document(root, opts)
-        inner(root, root_options(root, opts[:root_options]))
+        inner(root, root_options(root, opts))
         create_outline(root)
         finish_document(root)
         @pdf.render
