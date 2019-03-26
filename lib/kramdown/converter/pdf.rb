@@ -43,7 +43,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.15'
+      VERSION = '1.0.16'
 
       include Prawn::Measurements
 
@@ -528,6 +528,7 @@ module Kramdown
         doc.font_families.update("Roboto Condensed": {
             normal: { file: "./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf", font: "RobotoCondensed" }
         })
+        puts doc.font_families
         doc.extend(PrawnDocumentExtension)
         doc.converter = self
         doc
