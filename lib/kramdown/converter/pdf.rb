@@ -62,7 +62,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.26'
+      VERSION = '1.0.27'
 
       include Prawn::Measurements
 
@@ -91,10 +91,6 @@ module Kramdown
       # A PDF destination is also added at the current location if th element has an ID or if the
       # element is of type :header and the :auto_ids option is set.
       def convert(el, opts = {})
-        puts "\n PDF Converter Options"
-        puts @options
-        puts "\n"
-
         id = el.attr['id']
         id = generate_id(el.options[:raw_text]) if !id && @options[:auto_ids] && el.type == :header
         if !id.to_s.empty? && !@dests.key?(id)
@@ -547,16 +543,22 @@ module Kramdown
       #
       # Used in #render_root.
       def setup_document(root, opts)
-        puts opts
         doc = Prawn::Document.new(document_options(root))
-        doc.font_families.update("Roboto-Condensed" => {
-            normal: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf"),
-            bold: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf"),
-            bold_italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-BoldItalic.ttf"),
-            italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Italic.ttf"),
-            light: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Light.ttf"),
-            light_italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-LightItalic.ttf")
-        })
+
+        if @options.key? :pdf_converter
+            if @options[:pdf_converter].key? :register_fonts
+                puts @options[:pdf_converter][:register_fonts]
+                doc.font_families.update @options[:pdf_converter][:register_fonts]
+                # doc.font_families.update("Roboto-Condensed" => {
+                #     normal: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf"),
+                #     bold: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf"),
+                #     bold_italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-BoldItalic.ttf"),
+                #     italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Italic.ttf"),
+                #     light: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Light.ttf"),
+                #     light_italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-LightItalic.ttf")
+                # })
+            end
+        end
         doc.extend(PrawnDocumentExtension)
         doc.converter = self
         doc
