@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
-# stub: kramdown-converter-pdf 1.0.7 ruby lib
+# stub: kramdown-converter-pdf 1.0.8 ruby lib
 
 Gem::Specification.new do |s|
   s.name = "kramdown-converter-pdf".freeze
-  s.version = "1.0.7"
+  s.version = "1.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Thomas Leitner".freeze]
-  s.date = "2019-03-25"
+  s.date = "2019-03-26"
   s.email = "t_leitner@gmx.at".freeze
   s.files = ["CONTRIBUTERS".freeze, "COPYING".freeze, "VERSION".freeze, "lib/kramdown-converter-pdf.rb".freeze, "lib/kramdown/converter/pdf.rb".freeze]
   s.homepage = "https://github.com/kramdown/converter-pdf".freeze
