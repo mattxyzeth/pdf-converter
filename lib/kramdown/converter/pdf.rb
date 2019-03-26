@@ -43,7 +43,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.17'
+      VERSION = '1.0.18'
 
       include Prawn::Measurements
 
@@ -103,7 +103,7 @@ module Kramdown
       # ----------------------------
 
       def root_options(_root, _opts)
-        { font: 'RobotoCondensed', size: 12, leading: 2 }
+        { font: 'Roboto Condensed', size: 12, leading: 2 }
       end
 
       def render_root(root, opts)
