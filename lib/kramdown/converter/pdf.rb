@@ -11,6 +11,7 @@ require 'prawn'
 require 'prawn/table'
 require 'kramdown/converter/base'
 require 'kramdown/utils'
+require 'kramdown/options'
 require 'open-uri'
 
 module Kramdown
@@ -43,13 +44,13 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.22'
+      VERSION = '1.0.23'
 
       include Prawn::Measurements
 
       def initialize(root, options)
         super
-        Kramdown::Options.define(:pdf_converter, Object, {}, <<~EOF) do |val|
+        Options.define(:pdf_converter, Object, {}, <<~EOF) do |val|
             Options for setting up Prawn to render the PDF properly.
 
             This option can contain a map of render options for every
@@ -63,7 +64,7 @@ module Kramdown
             must be a string not a Symbol. The path to the font file must
             be a string or a Pathname.
         EOF
-            Kramdown::Options.simple_hash_validator(val, :pdf_converter)
+            Options.simple_hash_validator(val, :pdf_converter)
         end
         @stack = []
         @dests = {}
