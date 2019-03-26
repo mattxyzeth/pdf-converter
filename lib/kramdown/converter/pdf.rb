@@ -525,6 +525,7 @@ module Kramdown
       # Used in #render_root.
       def setup_document(root, opts)
         doc = Prawn::Document.new(document_options(root))
+        puts Dir.pwd
         doc.font_families.update("Roboto Condensed": {
             normal: "fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf",
             bold: "fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf",
