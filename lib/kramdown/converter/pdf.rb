@@ -62,7 +62,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.25'
+      VERSION = '1.0.26'
 
       include Prawn::Measurements
 
@@ -92,7 +92,7 @@ module Kramdown
       # element is of type :header and the :auto_ids option is set.
       def convert(el, opts = {})
         puts "\n PDF Converter Options"
-        puts opts
+        puts @options
         puts "\n"
 
         id = el.attr['id']
