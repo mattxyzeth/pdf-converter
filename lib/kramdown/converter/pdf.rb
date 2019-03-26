@@ -43,12 +43,28 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.20'
+      VERSION = '1.0.21'
 
       include Prawn::Measurements
 
       def initialize(root, options)
         super
+        ::Options.define(:pdf_converter, Object, {}, <<~EOF) do |val|
+            Options for setting up Prawn to render the PDF properly.
+
+            This option can contain a map of render options for every
+            element type. Things that can be passed are font names, colors,
+            styles and other Prawn element render options.
+            http://prawnpdf.org/manual.pdf
+
+            You can also pass a :register_fonts key that holds a Hash of
+            fonts you\'d like to register. Make sure to follow the Prawn
+            documentation on how to register new fonts. The key for a font
+            must be a string not a Symbol. The path to the font file must
+            be a string or a Pathname.
+        EOF
+            ::Options.simple_hash_validator(val, :pdf_converter)
+        end
         @stack = []
         @dests = {}
       end
@@ -524,6 +540,7 @@ module Kramdown
       #
       # Used in #render_root.
       def setup_document(root, opts)
+        puts opts
         doc = Prawn::Document.new(document_options(root))
         doc.font_families.update("Roboto-Condensed" => {
             normal: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf"),
