@@ -43,7 +43,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.8'
+      VERSION = '1.0.9'
 
       include Prawn::Measurements
 
@@ -527,9 +527,9 @@ module Kramdown
         doc = Prawn::Document.new(document_options(root))
         puts Dir.pwd
         doc.font_families.update("Roboto Condensed": {
-            normal: "fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf",
-            bold: "fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf",
-            italic: "fonts/Roboto_Condensed/RobotoCondensed-Italic.ttf"
+            normal: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf"),
+            bold: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf"),
+            italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Italic.ttf")
         })
         doc.extend(PrawnDocumentExtension)
         doc.converter = self
