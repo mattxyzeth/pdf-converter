@@ -19,16 +19,23 @@ module Kramdown
     define(:pdf_converter, Object, {}, <<~EOF) do |val|
       Options for setting up Prawn to render the PDF properly.
 
-      This option can contain a map of render options for every
-      element type. Things that can be passed are font names, colors,
-      styles and other Prawn element render options.
-      http://prawnpdf.org/manual.pdf
-
-      You can also pass a :register_fonts key that holds a Hash of
+      You can pass a :register_fonts key that holds a Hash of
       fonts you\'d like to register. Make sure to follow the Prawn
       documentation on how to register new fonts. The key for a font
       must be a string not a Symbol. The path to the font file must
       be a string or a Pathname.
+
+      For each element type you may pass in a list of options that should
+      be passed on to Prawn. For instance; you can pass in options for just
+      the root element like so:
+
+      ```
+      root: { font: 'Roboto-Condensed', size: 12, leading: 2 }
+      ```
+
+      This will use the font 'Roboto-Condensed' for the root element now.
+
+      http://prawnpdf.org/manual.pdf
     EOF
       Options.simple_hash_validator(val, :pdf_converter)
     end
@@ -62,7 +69,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.27'
+      VERSION = '1.0.28'
 
       include Prawn::Measurements
 
@@ -110,6 +117,10 @@ module Kramdown
         @stack.push([el, opts])
         result = el.children.map do |inner_el|
           options = opts.dup
+
+          puts inner_el
+          puts inner_el.type
+
           options.update(send(DISPATCHER_OPTIONS[inner_el.type], inner_el, options))
           convert(inner_el, options)
         end.flatten.compact
@@ -549,14 +560,6 @@ module Kramdown
             if @options[:pdf_converter].key? :register_fonts
                 puts @options[:pdf_converter][:register_fonts]
                 doc.font_families.update @options[:pdf_converter][:register_fonts]
-                # doc.font_families.update("Roboto-Condensed" => {
-                #     normal: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf"),
-                #     bold: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf"),
-                #     bold_italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-BoldItalic.ttf"),
-                #     italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Italic.ttf"),
-                #     light: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-Light.ttf"),
-                #     light_italic: File.realpath("./fonts/Roboto_Condensed/RobotoCondensed-LightItalic.ttf")
-                # })
             end
         end
         doc.extend(PrawnDocumentExtension)
