@@ -62,7 +62,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.24'
+      VERSION = '1.0.25'
 
       include Prawn::Measurements
 
@@ -91,6 +91,10 @@ module Kramdown
       # A PDF destination is also added at the current location if th element has an ID or if the
       # element is of type :header and the :auto_ids option is set.
       def convert(el, opts = {})
+        puts "\n PDF Converter Options"
+        puts opts
+        puts "\n"
+
         id = el.attr['id']
         id = generate_id(el.options[:raw_text]) if !id && @options[:auto_ids] && el.type == :header
         if !id.to_s.empty? && !@dests.key?(id)
