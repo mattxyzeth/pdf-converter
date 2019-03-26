@@ -69,12 +69,13 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.28'
+      VERSION = '1.0.29'
 
       include Prawn::Measurements
 
       def initialize(root, options)
         super
+        @pdf_opts = options[:pdf_converter] || {}
         @stack = []
         @dests = {}
       end
@@ -117,11 +118,14 @@ module Kramdown
         @stack.push([el, opts])
         result = el.children.map do |inner_el|
           options = opts.dup
-
-          puts inner_el
-          puts inner_el.type
-
           options.update(send(DISPATCHER_OPTIONS[inner_el.type], inner_el, options))
+
+          # Update the options with any passed in options from Kramdown
+          type_sym = inner_el.type.to_sym
+          if @pdf_opts.key? type_sym
+              options.update(@pdf_opts[type_sym])
+          end
+
           convert(inner_el, options)
         end.flatten.compact
         @stack.pop
@@ -132,13 +136,13 @@ module Kramdown
       # :section: Element rendering methods
       # ----------------------------
 
-      def root_options(_root, _opts)
-        { font: 'Roboto-Condensed', size: 12, leading: 2 }
+      def root_options(_root, opts)
+          { font: 'Time-Roman', size: 12, leading: 2 }.merge opts
       end
 
       def render_root(root, opts)
         @pdf = setup_document(root, opts)
-        inner(root, root_options(root, opts))
+        inner(root, root_options(root, @pdf_opts[:root] || {}))
         create_outline(root)
         finish_document(root)
         @pdf.render
@@ -556,12 +560,10 @@ module Kramdown
       def setup_document(root, opts)
         doc = Prawn::Document.new(document_options(root))
 
-        if @options.key? :pdf_converter
-            if @options[:pdf_converter].key? :register_fonts
-                puts @options[:pdf_converter][:register_fonts]
-                doc.font_families.update @options[:pdf_converter][:register_fonts]
-            end
+        if @pdf_opts.key? :register_fonts
+            doc.font_families.update @pdf_opts[:register_fonts]
         end
+
         doc.extend(PrawnDocumentExtension)
         doc.converter = self
         doc
