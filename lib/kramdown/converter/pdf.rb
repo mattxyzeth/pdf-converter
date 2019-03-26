@@ -43,7 +43,7 @@ module Kramdown
     #
     class Pdf < Base
 
-      VERSION = '1.0.14'
+      VERSION = '1.0.15'
 
       include Prawn::Measurements
 
@@ -103,7 +103,7 @@ module Kramdown
       # ----------------------------
 
       def root_options(_root, _opts)
-        { font: 'Roboto Condensed', size: 12, leading: 2 }
+        { font: 'RobotoCondensed', size: 12, leading: 2 }
       end
 
       def render_root(root, opts)
@@ -525,11 +525,9 @@ module Kramdown
       # Used in #render_root.
       def setup_document(root, opts)
         doc = Prawn::Document.new(document_options(root))
-        roboto_path = Pathname.new("./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf")
         doc.font_families.update("Roboto Condensed": {
-            normal: roboto_path
+            normal: { file: "./fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf", font: "RobotoCondensed" }
         })
-        puts doc.methods
         doc.extend(PrawnDocumentExtension)
         doc.converter = self
         doc
